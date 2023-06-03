@@ -19,7 +19,12 @@ const replyToLine = async (token) => {
       const scrapedDataArray = JSON.parse(row.scrapedData);
       const msg = formatToReply(scrapedDataArray);
       console.log(`run: replyToLine, check db:`, row.date, row.name);
-      client.replyMessage(token, { type: "text", text: msg });
+      client
+        .replyMessage(token, { type: "text", text: msg })
+        .then("complete: replyMessage")
+        .catch((err) => {
+          throw new Error(`err: run: replyToken`, err);
+        });
     });
   });
   db.close();

@@ -32,7 +32,8 @@ const formatToReplyRecent = (scrapedData) => {
 
 const formatToReplyTotal = (scrapedData) => {
   let returnText = "";
-  returnText = `${scrapedData.playerName}:メジャー通算成績\n${scrapedData.totalStats.fullText.join(" ")}`;
+  const fullText = scrapedData.totalStats.fullText;
+  returnText = `${scrapedData.playerName}:メジャー通算成績\n${fullText.join(" ")}`;
   return returnText;
 };
 

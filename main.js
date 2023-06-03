@@ -18,18 +18,18 @@ const replyToLine = async (token) => {
     db.each("SELECT date, name, scrapedData FROM scrapedDb", (err, row) => {
       let scrapedDataArray = JSON.parse(row.scrapedData);
       console.log(`run: replyToLine, check db:`, row.date, row.name);
-      for (let i in scrapedDataArray) {
-        client.replyMessage(token, { type: "text", text: formatToReply(scrapedDataArray[i]) });
-      }
+      // for (let i in scrapedDataArray) {
+      //   client.replyMessage(token, { type: "text", text: formatToReply(scrapedDataArray[i]) });
+      // }
     });
   });
   db.close();
 };
 const scrapeCycle = async () => {
   for (let i in samuraiList) {
-    console.log(`scrape: ${samuraiList[i].name}`);
+    console.log(`run: scrapeCycle, doing: scrape: ${samuraiList[i].name}`);
     await scrapeToSqlite(samuraiList[i].url, samuraiList[i].selector);
-    console.log(`scrape complete`);
+    console.log(`complete: scrapeCycle`);
   }
 };
 

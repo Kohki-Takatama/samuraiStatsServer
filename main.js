@@ -14,27 +14,22 @@ const client = new line.Client(CONFIG);
 
 const replyToLine = async (token) => {
   const db = new sqlite3.Database("./scrapedDb.db");
-  let dataArray = [];
   db.serialize(() => {
     db.each("SELECT date, name, scrapedData FROM scrapedDb ORDER BY date ASC", (err, row) => {
-      let scrapedDataArray = JSON.parse(row.scrapedData);
+      const scrapedDataArray = JSON.parse(row.scrapedData);
+      const msg = formatToReply(scrapedDataArray);
       console.log(`run: replyToLine, check db:`, row.date, row.name);
-      dataArray.push(scrapedDataArray);
+      client.replyMessage(token, { type: "text", text: msg });
     });
   });
-  for (let i in dataArray) {
-    const msg = formatToReply(dataArray[i]);
-    console.log(`run: replyToLine, check: msg: `, msg);
-    client.replyMessage(token, { type: "text", text: msg });
-  }
   db.close();
 };
 const scrapeCycle = async () => {
   for (let i in samuraiList) {
     console.log(`run: scrapeCycle, doing: scrape: ${samuraiList[i].name}`);
     await scrapeToSqlite(samuraiList[i].url, samuraiList[i].selector);
-    console.log(`complete: scrapeCycle`);
   }
+  console.log(`complete: scrapeCycle`);
 };
 
 const receiveAndPassData = (event) => {

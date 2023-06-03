@@ -22,8 +22,10 @@ const replyToLine = async (token) => {
       dataArray.push(scrapedDataArray);
     });
   });
-  for (let i in scrapedDataArray) {
-    client.replyMessage(token, { type: "text", text: formatToReply(scrapedDataArray[i]) });
+  for (let i in dataArray) {
+    const msg = formatToReply(dataArray[i]);
+    console.log(`run: replyToLine, check: msg: `, msg);
+    client.replyMessage(token, { type: "text", text: msg });
   }
   db.close();
 };

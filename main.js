@@ -4,7 +4,8 @@ const sqlite3 = require("sqlite3").verbose();
 const samuraiList = require("./dbForScrape.js");
 const scrapeToSqlite = require("./scrape.js");
 const formatToReply = require("./formatToReply.js");
-// const convertToDate = require("./convertToDate.js");
+const formatToReplyRecent = formatToReply.formatToReplyRecent;
+const formatToReplyTotal = formatToReply.formatToReplyTotal;
 
 const CONFIG = {
   channelAccessToken: process.env.ACCESS_TOKEN,
@@ -13,84 +14,64 @@ const CONFIG = {
 
 const client = new line.Client(CONFIG);
 
-// const scrapeAndFormat = async (url, cssSelector) => {
-//   const scrapedData = await scrapeToSqlite(url, cssSelector);
-//   const formatedData = formatToReply(scrapedData);
-//   return formatedData;
-// };
-
-
-const replyToLine = async (token) => {
-  //   let replyMessage = "";
-  //   if (message.includes("最新")) {
-  //     let sortArray = [];
-  //     for (let i in samuraiList) {
-  //       sortArray.push(
-  //         await scrapeToSqlite(samuraiList[i].url, samuraiList[i].selector)
-  //       );
-  //     }
-
-  //     sortArray.sort(
-  //       (a, b) =>
-  //         convertToDate(a.recentStats.日付) - convertToDate(b.recentStats.日付)
-  //     );
-  //     for (let i in sortArray) {
-  //       const formatedData = formatToReply(sortArray[i]);
-  //       console.log(i);
-  //       console.log(formatedData)
-  //       client.replyMessage(token, { type: "text", text: formatedData });
-  //     }
-  //   } else {
-  //     client.replyMessage(token, { type: "text", text: "don't match any case" });
-  //   }
-  //await scrapeToSqlite(samuraiList[0].url, samuraiList[0].selector);
-
+const replyToLine = async (token, messageType) => {
   const db = new sqlite3.Database("./scrapedDb.db");
   db.serialize(() => {
-    db.each(
-      "SELECT date, name, scrapedData FROM scrapedDb",
-       (err, row) =>{
-        let scrapedDataArray = JSON.parse(row.scrapedData);
-         console.log(scrapedDataArray)
-        console.log(`replyToLine: db:`, row.date, row.name);
-         for(let i in scrapedDataArray) {
-            client.replyMessage(token, { type: "text", text: formatToReply(scrapedDataArray[i]) })
-         }
+    db.all("SELECT date, name, scrapedData FROM scrapedDb ORDER BY date ASC", (err, rows) => {
+      rows.map((e) => (e.scrapedData = JSON.parse(e.scrapedData)));
+      let msg = [];
+      for (let i in rows) {
+        if (messageType === "recent") {
+          console.log(`run: replyToLine, pattern: recent`);
+          msg.push(formatToReplyRecent(rows[i].scrapedData));
+        } else if (messageType === "total") {
+          console.log(`run: replyToLine, pattern: total`);
+          msg.push(formatToReplyTotal(rows[i].scrapedData));
+        } else {
+          console.error(`err: run: replyToLine: messageType don't match`);
+        }
       }
-    );
+      msg = msg.join("\n\n");
+      // console.log(`run: replyToLine, check db:`, row.date, row.name);
+      client
+        .replyMessage(token, { type: "text", text: msg })
+        .then("complete: replyToLine")
+        .catch((err) => {
+          console.error(`err: run: replyToken`, err);
+        });
+    });
   });
   db.close();
 };
-const scrapeCycle = async () => {
+const scrapeCycle = async (token) => {
   for (let i in samuraiList) {
-    console.log(`scrape: ${samuraiList[i].name}`)
+    console.log(`run: scrapeCycle, doing: scrape: ${samuraiList[i].name}`);
     await scrapeToSqlite(samuraiList[i].url, samuraiList[i].selector);
-    console.log(`scrape complete`)
   }
-
-  const db = new sqlite3.Database("./scrapedDb.db");
-  db.serialize(() => {
-    db.each(
-      "SELECT date, name, scrapedData FROM scrapedDb ORDER BY date ASC",
-      function (err, row) {
-        let scrapedDataArray = JSON.parse(row.scrapedData);
-        console.log(`scrapeCycle: db:`, row.date, row.name);
-      }
-    );
-  });
-  db.close();
+  console.log(`complete: scrapeCycle`);
+  client.replyMessage(token, { type: "text", text: "complete: set" });
 };
 
 const receiveAndPassData = (event) => {
-  const msg = event.message.text
-  const token = event.replyToken
-  if(msg.includes("set")) {
-    console.log("set data")
-    scrapeCycle();
+  const msg = event.message.text;
+  const token = event.replyToken;
+  if (msg.includes("set")) {
+    console.log("run: scrapeCycle");
+    scrapeCycle(token);
   } else if (msg.includes("recent")) {
-    console.log(`reply recent`)
-    replyToLine(token)
+    console.log(`run: replyToLine("recent")`);
+    replyToLine(token, "recent");
+  } else if (msg.includes("total")) {
+    console.log(`run: replyToLine("total")`);
+    replyToLine(token, "total");
+  } else {
+    client
+      .replyMessage(token, { type: "text", text: "your message don't include keyword" })
+      .then("complete: replyToLine")
+      .catch((err) => {
+        console.error(`err: run: replyToken`, err);
+      });
   }
-}
+};
 
 module.exports = receiveAndPassData;

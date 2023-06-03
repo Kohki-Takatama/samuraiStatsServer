@@ -22,8 +22,10 @@ const replyToLine = async (token, messageType) => {
       let msg = [];
       for (let i in rows) {
         if (messageType === "recent") {
+          console.log(`run: replyToLine, pattern: recent`);
           msg.push(formatToReplyRecent(rows[i].scrapedData));
         } else if (messageType === "total") {
+          console.log(`run: replyToLine, pattern: total`);
           msg.push(formatToReplyTotal(rows[i].scrapedData));
         } else {
           console.error(`err: run: replyToLine: messageType don't match`);

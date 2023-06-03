@@ -33,12 +33,13 @@ const replyToLine = async (token) => {
   });
   db.close();
 };
-const scrapeCycle = async () => {
+const scrapeCycle = async (token) => {
   for (let i in samuraiList) {
     console.log(`run: scrapeCycle, doing: scrape: ${samuraiList[i].name}`);
     await scrapeToSqlite(samuraiList[i].url, samuraiList[i].selector);
   }
   console.log(`complete: scrapeCycle`);
+  client.replyMessage(token, { type: "text", text: "complete: set" });
 };
 
 const receiveAndPassData = (event) => {
@@ -46,7 +47,7 @@ const receiveAndPassData = (event) => {
   const token = event.replyToken;
   if (msg.includes("set")) {
     console.log("run: scrapeCycle");
-    scrapeCycle();
+    scrapeCycle(token);
   } else if (msg.includes("recent")) {
     console.log(`run: replyToLine`);
     replyToLine(token);

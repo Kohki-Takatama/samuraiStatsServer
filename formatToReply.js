@@ -1,4 +1,4 @@
-const formatToReply = (scrapedData) => {
+const formatToReplyRecent = (scrapedData) => {
   // TODO: updateDateと日付を比較し、「最近の試合なら」「今現在試合中の可能性があるなら」などで分岐（変数を設置して、文の中で分岐するのが良さそう）
   let nowOrNot = false;
   let now = new Date();
@@ -30,4 +30,10 @@ const formatToReply = (scrapedData) => {
   return returnText;
 };
 
-module.exports = formatToReply;
+const formatToReplyTotal = (scrapedData) => {
+  let returnText = "";
+  returnText = `${scrapedData.playerName}:メジャー通算成績\n${scrapedData.totalStats.fullText}`;
+};
+
+exports.formatToReplyRecent = formatToReplyRecent;
+exports.formatToReplyTotal = formatToReplyTotal;

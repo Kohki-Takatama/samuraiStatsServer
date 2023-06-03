@@ -71,6 +71,7 @@ const scrapeToSqlite = async (url, cssSelectorArray) => {
     const totalStatsHeader = await fetchHTMLText(cssSelectorArray.totalStatsHeader);
     const totalStatsData = await fetchHTMLText(cssSelectorArray.totalStatsData);
     returnScrapeArray.totalStats = mergeArraysToString(totalStatsHeader, totalStatsData);
+    returnScrapeArray.totalStats.fullText = mergeArraysToString(totalStatsHeader, totalStatsData);
     //NOTE: 更新日時（複数ある場合がある。ページ上に表示されるのは[0]だったので[0]を選択）
     const updateDateArray = await fetchHTMLText(".bb-tableNote__update");
     returnScrapeArray.updateDate = updateDateArray[0];

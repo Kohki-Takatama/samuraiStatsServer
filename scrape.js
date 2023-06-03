@@ -1,6 +1,6 @@
 const axios = require("axios");
 const { load: loadByCheerio } = require("cheerio");
-const convertToDate = require("./convertToDate")
+const convertToDate = require("./convertToDate");
 
 const returnHTML = async (url) => {
   try {
@@ -12,7 +12,6 @@ const returnHTML = async (url) => {
 };
 
 const scrapeToSqlite = async (url, cssSelectorArray) => {
-  
   const html = await returnHTML(url);
   const $ = loadByCheerio(html);
 
@@ -21,9 +20,7 @@ const scrapeToSqlite = async (url, cssSelectorArray) => {
     const elements = await $(cssSelector);
 
     if (elements.length === 0) {
-      throw new Error(
-        `No elements found for selector: ${cssSelector}\nURL: ${url}`
-      );
+      throw new Error(`No elements found for selector: ${cssSelector}\nURL: ${url}`);
     }
 
     elements.each((i, e) => {
@@ -62,36 +59,18 @@ const scrapeToSqlite = async (url, cssSelectorArray) => {
   };
 
   let returnScrapeArray = {};
-  returnScrapeArray.stats = {};
   try {
     //NOTE: 名前
-    returnScrapeArray.playerName = await fetchHTMLText(
-      cssSelectorArray.playerName
-    );
+    returnScrapeArray.playerName = await fetchHTMLText(cssSelectorArray.playerName);
     //NOTE: 最新試合成績
-    const recentStatsHeader = await fetchHTMLText(
-      cssSelectorArray.recentStatsHeader
-    );
-    const recentStatsData = await fetchHTMLText(
-      cssSelectorArray.recentStatsData
-    );
-    returnScrapeArray.stats.recentStats = mergeArraysToDictionary(
-      recentStatsHeader,
-      recentStatsData
-    );
-    returnScrapeArray.stats.recentStats.fullText = mergeArraysToString(
-      recentStatsHeader,
-      recentStatsData
-    );
+    const recentStatsHeader = await fetchHTMLText(cssSelectorArray.recentStatsHeader);
+    const recentStatsData = await fetchHTMLText(cssSelectorArray.recentStatsData);
+    returnScrapeArray.recentStats = mergeArraysToDictionary(recentStatsHeader, recentStatsData);
+    returnScrapeArray.recentStats.fullText = mergeArraysToString(recentStatsHeader, recentStatsData);
     //NOTE: 通算成績
-    const totalStatsHeader = await fetchHTMLText(
-      cssSelectorArray.totalStatsHeader
-    );
+    const totalStatsHeader = await fetchHTMLText(cssSelectorArray.totalStatsHeader);
     const totalStatsData = await fetchHTMLText(cssSelectorArray.totalStatsData);
-    returnScrapeArray.stats.totalStats = mergeArraysToString(
-      totalStatsHeader,
-      totalStatsData
-    );
+    returnScrapeArray.totalStats = mergeArraysToString(totalStatsHeader, totalStatsData);
     //NOTE: 更新日時（複数ある場合がある。ページ上に表示されるのは[0]だったので[0]を選択）
     const updateDateArray = await fetchHTMLText(".bb-tableNote__update");
     returnScrapeArray.updateDate = updateDateArray[0];
@@ -108,18 +87,20 @@ const scrapeToSqlite = async (url, cssSelectorArray) => {
   const sqlite3 = require("sqlite3").verbose();
   const db = new sqlite3.Database("./scrapedDb.db");
 
-  await db.serialize(() =>{
-    db.run(
-      "CREATE TABLE IF NOT EXISTS scrapedDb (date DATE, name TEXT UNIQUE, scrapedData TEXT)"
-    );
+  await db.serialize(() => {
+    db.run("CREATE TABLE IF NOT EXISTS scrapedDb (date DATE, name TEXT UNIQUE, scrapedData TEXT)");
 
-    const stats = returnScrapeArray.stats
+    const stats = returnScrapeArray.stats;
     let stmt = db.prepare("INSERT OR REPLACE INTO scrapedDb VALUES (?, ?, ?)");
     const now = new Date();
-    let date = returnScrapeArray.stats.recentStats.日付.replace("月", " ").replace("日", "").split(" ").map(e=>e.padStart(2, '0'))
+    let date = returnScrapeArray.stats.recentStats.日付
+      .replace("月", " ")
+      .replace("日", "")
+      .split(" ")
+      .map((e) => e.padStart(2, "0"));
     date = now.getFullYear() + "-" + date.join("-");
     const name = returnScrapeArray.playerName[0];
-    stmt.run(date, name, JSON.stringify(stats));
+    stmt.run(date, name, JSON.stringify(returnScrapeArray));
     stmt.finalize();
   });
 

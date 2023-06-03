@@ -16,18 +16,18 @@ const replyToLine = async (token) => {
   const db = new sqlite3.Database("./scrapedDb.db");
   db.serialize(() => {
     db.all("SELECT date, name, scrapedData FROM scrapedDb ORDER BY date ASC", (err, rows) => {
-      rows.map((e) => JSON.parse(e.scrapedData));
+      rows.map((e) => (e.scrapedData = JSON.parse(e.scrapedData)));
       let msg = [];
       for (let i in rows) {
-        msg.push(formatToReply(rows[i]));
+        msg.push(formatToReply(rows[i].scrapedData));
       }
-      msg.join("\n\n");
+      msg = msg.join("\n\n");
       // console.log(`run: replyToLine, check db:`, row.date, row.name);
       client
         .replyMessage(token, { type: "text", text: msg })
         .then("complete: replyToLine")
         .catch((err) => {
-          throw new Error(`err: run: replyToken`, err);
+          console.error(`err: run: replyToken`, err);
         });
     });
   });

@@ -11,13 +11,13 @@ const formatToReply = (scrapedData) => {
 
   //NOTE: 打者か投手かの判別。
   if ("打席結果" in scrapedData.recentStats) {
-    returnText = `${scrapedData.playerName[0]}は${scrapedData.recentStats.日付}の試合に出場${
+    returnText = `${scrapedData.playerName}は${scrapedData.recentStats.日付}の試合に出場${
       nowOrNot ? "しています" : "しました"
     }。\n成績は「${scrapedData.recentStats.打席結果}」で${nowOrNot ? "す" : "した"}。\n詳細な成績→ 打点:${
       scrapedData.recentStats.打点
     }`;
   } else {
-    returnText = `${scrapedData.playerName[0]}は${scrapedData.recentStats.日付}の試合に登板${
+    returnText = `${scrapedData.playerName}は${scrapedData.recentStats.日付}の試合に登板${
       nowOrNot ? "しています" : "しました"
     }。\n${scrapedData.recentStats.投球回}回を投げ、失点は${scrapedData.recentStats.失点}、自責点は${
       scrapedData.recentStats.自責点

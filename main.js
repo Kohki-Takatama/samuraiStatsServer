@@ -14,15 +14,17 @@ const client = new line.Client(CONFIG);
 
 const replyToLine = async (token) => {
   const db = new sqlite3.Database("./scrapedDb.db");
+  let dataArray = [];
   db.serialize(() => {
-    db.each("SELECT date, name, scrapedData FROM scrapedDb", (err, row) => {
+    db.each("SELECT date, name, scrapedData FROM scrapedDb ORDER BY date ASC", (err, row) => {
       let scrapedDataArray = JSON.parse(row.scrapedData);
       console.log(`run: replyToLine, check db:`, row.date, row.name);
-      // for (let i in scrapedDataArray) {
-      //   client.replyMessage(token, { type: "text", text: formatToReply(scrapedDataArray[i]) });
-      // }
+      dataArray.push(scrapedDataArray);
     });
   });
+  for (let i in scrapedDataArray) {
+    client.replyMessage(token, { type: "text", text: formatToReply(scrapedDataArray[i]) });
+  }
   db.close();
 };
 const scrapeCycle = async () => {

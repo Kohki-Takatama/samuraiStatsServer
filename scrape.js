@@ -90,6 +90,7 @@ const scrapeToSqlite = async (url, cssSelectorArray) => {
 
   await db.serialize(() => {
     db.run("CREATE TABLE IF NOT EXISTS scrapedDb (date DATE, name TEXT UNIQUE, scrapedData TEXT)");
+    db.run(`DELETE FROM scrapedDb WHERE name IS NULL`);
     let statement = db.prepare("INSERT OR REPLACE INTO scrapedDb VALUES (?, ?, ?)");
     const now = new Date();
     let date = returnScrapeArray.recentStats.日付

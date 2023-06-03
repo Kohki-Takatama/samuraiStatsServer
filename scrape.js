@@ -97,7 +97,14 @@ const scrapeToSqlite = async (url, cssSelectorArray) => {
       .split(" ")
       .map((e) => e.padStart(2, "0"));
     date = now.getFullYear() + "-" + date.join("-");
-    const name = returnScrapeArray.playerName[0];
+    let name = returnScrapeArray.playerName[0];
+    if (name === "大谷 翔平") {
+      if (returnScrapeArray.recentStats.打点) {
+        name = "大谷 翔平(打)";
+      } else {
+        name = "大谷 翔平(投)";
+      }
+    }
     statement.run(date, name, JSON.stringify(returnScrapeArray));
     statement.finalize();
   });

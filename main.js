@@ -17,10 +17,8 @@ const replyToLine = async (token) => {
   db.serialize(() => {
     db.each("SELECT date, name, scrapedData FROM scrapedDb", (err, row) => {
       let scrapedDataArray = JSON.parse(row.scrapedData);
-      console.log("scrapedDataArray: ", scrapedDataArray);
       console.log(`run: replyToLine, check db:`, row.date, row.name);
       for (let i in scrapedDataArray) {
-        console.log(`run: replyToLine, check arr:`, scrapedDataArray);
         client.replyMessage(token, { type: "text", text: formatToReply(scrapedDataArray[i]) });
       }
     });

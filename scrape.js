@@ -79,8 +79,8 @@ const scrapeToSqlite = async (url, cssSelectorArray) => {
       `${error}
       \nCurrent returnArray:
       \nplayerName: ${returnScrapeArray.playerName}
-      \nrecentStats: ${returnScrapeArray.stats.recentStats}
-      \ntotalStats: ${returnScrapeArray.stats.totalStats}
+      \nrecentStats: ${returnScrapeArray.recentStats}
+      \ntotalStats: ${returnScrapeArray.totalStats}
       \nupdateDate: ${returnScrapeArray.updateDate}`
     );
   }
@@ -89,19 +89,17 @@ const scrapeToSqlite = async (url, cssSelectorArray) => {
 
   await db.serialize(() => {
     db.run("CREATE TABLE IF NOT EXISTS scrapedDb (date DATE, name TEXT UNIQUE, scrapedData TEXT)");
-
-    const stats = returnScrapeArray.stats;
-    let stmt = db.prepare("INSERT OR REPLACE INTO scrapedDb VALUES (?, ?, ?)");
+    let statement = db.prepare("INSERT OR REPLACE INTO scrapedDb VALUES (?, ?, ?)");
     const now = new Date();
-    let date = returnScrapeArray.stats.recentStats.日付
+    let date = returnScrapeArray.recentStats.日付
       .replace("月", " ")
       .replace("日", "")
       .split(" ")
       .map((e) => e.padStart(2, "0"));
     date = now.getFullYear() + "-" + date.join("-");
     const name = returnScrapeArray.playerName[0];
-    stmt.run(date, name, JSON.stringify(returnScrapeArray));
-    stmt.finalize();
+    statement.run(date, name, JSON.stringify(returnScrapeArray));
+    statement.finalize();
   });
 
   db.close();

@@ -10,8 +10,7 @@ const returnHTML = async (url) => {
   }
 };
 
-const fetchHTMLText = async (url, selector) => {
-  const html = await returnHTML(url);
+const fetchHTMLText = async (html, selector) => {
   const $ = loadByCheerio(html);
   let returnArray = [];
   const elements = await $(selector);
@@ -56,22 +55,23 @@ const mergeArraysToDictionary = (keyArray, dataArray) => {
 };
 
 const scrapeToSqlite = async (url, selectors) => {
+  const html = await returnHTML(url);
   let returnScrapeArray = {};
   try {
     //NOTE: 名前
-    returnScrapeArray.playerName = await fetchHTMLText(url, selectors.playerName);
+    returnScrapeArray.playerName = await fetchHTMLText(html, selectors.playerName);
     //NOTE: 最新試合成績
-    const recentStatsHeader = await fetchHTMLText(url, selectors.recentStatsHeader);
-    const recentStatsData = await fetchHTMLText(url, selectors.recentStatsData);
+    const recentStatsHeader = await fetchHTMLText(html, selectors.recentStatsHeader);
+    const recentStatsData = await fetchHTMLText(html, selectors.recentStatsData);
     returnScrapeArray.recentStats = mergeArraysToDictionary(recentStatsHeader, recentStatsData);
     returnScrapeArray.recentStats.fullText = mergeArraysToString(recentStatsHeader, recentStatsData);
     //NOTE: 通算成績
-    const totalStatsHeader = await fetchHTMLText(url, selectors.totalStatsHeader);
-    const totalStatsData = await fetchHTMLText(url, selectors.totalStatsData);
+    const totalStatsHeader = await fetchHTMLText(html, selectors.totalStatsHeader);
+    const totalStatsData = await fetchHTMLText(html, selectors.totalStatsData);
     returnScrapeArray.totalStats = mergeArraysToDictionary(totalStatsHeader, totalStatsData);
     returnScrapeArray.totalStats.fullText = mergeArraysToString(totalStatsHeader, totalStatsData);
     //NOTE: 更新日時（複数ある場合がある。ページ上に表示されるのは[0]だったので[0]を選択）
-    const updateDateArray = await fetchHTMLText(url, ".bb-tableNote__update");
+    const updateDateArray = await fetchHTMLText(html, ".bb-tableNote__update");
     returnScrapeArray.updateDate = updateDateArray[0];
   } catch (error) {
     throw new Error(

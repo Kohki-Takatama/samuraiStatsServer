@@ -1,6 +1,5 @@
 const axios = require("axios");
 const { load: loadByCheerio } = require("cheerio");
-const convertToDate = require("./convertToDate");
 
 const returnHTML = async (url) => {
   try {

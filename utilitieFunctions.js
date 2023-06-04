@@ -1,3 +1,11 @@
-  const sqlite3 = require("sqlite3").verbose();
-  const db = new sqlite3.Database("./scrapedDb.db");
-db.run("DROP TABLE IF EXISTS scrapedDb")
+const convertToDate = (str) => {
+  let [month, day] = str.replace("月", " ").replace("日", "").split(" ").map(Number);
+  let date = new Date();
+  date.setFullYear(date.getFullYear()); // 現在の年をセット
+  date.setMonth(month - 1); // JavaScriptのDateは0から始まるので1を引く
+  date.setDate(day);
+  const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  return dateOnly;
+};
+
+exports.convertToDate = convertToDate;

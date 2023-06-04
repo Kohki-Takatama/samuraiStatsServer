@@ -21,7 +21,7 @@ class ScrapeUtilities {
     const elements = await this.$(selector);
 
     if (elements.length === 0) {
-      throw new Error(`No elements found for selector: ${selector}\nURL: ${url}`);
+      throw new Error(`No elements found for selector: ${selector}\nURL: ${this.url}`);
     }
 
     elements.each((i, e) => {
@@ -40,7 +40,7 @@ class ScrapeUtilities {
       return returnArray;
     } else {
       throw new Error(
-        `dataLength don't match at mergeArraysToString.\ntitleArray: ${titleArray} , dataArray.length: ${dataArray}\nURL: ${url}`
+        `dataLength don't match at mergeArraysToString.\ntitleArray: ${titleArray} , dataArray.length: ${dataArray}\nURL: ${this.url}`
       );
     }
   }
@@ -54,7 +54,7 @@ class ScrapeUtilities {
       return returnArray;
     } else {
       throw new Error(
-        `dataLength don't match at mergeArrayToDictionary.\nkeyArray: ${keyArray} , dataArray.length: ${dataArray}\nURL: ${url}`
+        `dataLength don't match at mergeArrayToDictionary.\nkeyArray: ${keyArray} , dataArray.length: ${dataArray}\nURL: ${this.url}`
       );
     }
   }

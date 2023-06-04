@@ -1,21 +1,18 @@
 const axios = require("axios");
 const { load: loadByCheerio } = require("cheerio");
 
-const returnCheerioInterface = async (url) => {
+const returnHTML = async (url) => {
   try {
-    // const response = await axios.get(url);
-    // return response.data;
     const response = await axios.get(url);
-    const html = await response.data;
-    const cheerioInterface = loadByCheerio(html);
-    return cheerioInterface;
+    return response.data;
   } catch (error) {
     throw new Error(error);
   }
 };
 
 const scrapeToSqlite = async (url, selectors) => {
-  const $ = returnCheerioInterface(url);
+  const html = await returnHTML(url);
+  const $ = loadByCheerio(html);
 
   const fetchHTMLText = async (selector) => {
     let returnArray = [];

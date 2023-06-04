@@ -1,11 +1,11 @@
 const line = require("@line/bot-sdk");
 const sqlite3 = require("sqlite3").verbose();
 
-const samuraiList = require("./dbForScrape.js");
+const samuraiList = require("./scrapeParameters.js");
 const scrapeToSqlite = require("./scrape.js");
-const formatToReply = require("./formatToReply.js");
-const formatToReplyRecent = formatToReply.formatToReplyRecent;
-const formatToReplyTotal = formatToReply.formatToReplyTotal;
+const utilities = require("./utilitieFunctions.js");
+const formatToReplyRecent = utilities.formatToReplyRecent;
+const formatToReplyTotal = utilities.formatToReplyTotal;
 
 const CONFIG = {
   channelAccessToken: process.env.ACCESS_TOKEN,

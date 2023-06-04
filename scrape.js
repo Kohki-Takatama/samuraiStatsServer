@@ -13,8 +13,8 @@ class ScrapeUtilities {
       throw new Error(error);
     }
   }
-
-  $ = loadByCheerio(this.returnHTML(this.url));
+  html = this.returnHTML(this.url);
+  $ = loadByCheerio(this.html);
 
   async fetchHTMLText(selector) {
     let returnArray = [];

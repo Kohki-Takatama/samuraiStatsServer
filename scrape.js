@@ -1,35 +1,37 @@
 const axios = require("axios");
 const { load: loadByCheerio } = require("cheerio");
 
-const returnHTML = async (url) => {
-  try {
-    const response = await axios.get(url);
-    return response.data;
-  } catch (error) {
-    throw new Error(error);
+class ScrapeUtilities {
+  constructor(url) {
+    this.url = url;
   }
-};
+  async returnHTML(url) {
+    try {
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 
-const scrapeToSqlite = async (url, selectors) => {
-  const html = await returnHTML(url);
-  const $ = loadByCheerio(html);
+  $ = loadByCheerio(this.returnHTML(this.url));
 
-  const fetchHTMLText = async (selector) => {
+  async fetchHTMLText(selector) {
     let returnArray = [];
-    const elements = await $(selector);
+    const elements = await this.$(selector);
 
     if (elements.length === 0) {
       throw new Error(`No elements found for selector: ${selector}\nURL: ${url}`);
     }
 
     elements.each((i, e) => {
-      returnArray.push($(e).text().trim());
+      returnArray.push(this.$(e).text().trim());
     });
 
     return returnArray;
-  };
+  }
 
-  const mergeArraysToString = (titleArray, dataArray) => {
+  mergeArraysToString(titleArray, dataArray) {
     let returnArray = [];
     if (titleArray.length === dataArray.length) {
       for (let i = 0; i < titleArray.length; i++) {
@@ -41,9 +43,9 @@ const scrapeToSqlite = async (url, selectors) => {
         `dataLength don't match at mergeArraysToString.\ntitleArray: ${titleArray} , dataArray.length: ${dataArray}\nURL: ${url}`
       );
     }
-  };
+  }
 
-  const mergeArraysToDictionary = (keyArray, dataArray) => {
+  mergeArraysToDictionary(keyArray, dataArray) {
     let returnArray = {};
     if (keyArray.length === dataArray.length) {
       for (let i = 0; i < keyArray.length; i++) {
@@ -55,24 +57,30 @@ const scrapeToSqlite = async (url, selectors) => {
         `dataLength don't match at mergeArrayToDictionary.\nkeyArray: ${keyArray} , dataArray.length: ${dataArray}\nURL: ${url}`
       );
     }
-  };
+  }
+}
 
+const scrapeToSqlite = async (url, selectors) => {
+  const utilities = new ScrapeUtilities(url);
   let returnScrapeArray = {};
   try {
     //NOTE: 名前
-    returnScrapeArray.playerName = await fetchHTMLText(selectors.playerName);
+    returnScrapeArray.playerName = await utilities.fetchHTMLText(selectors.playerName);
     //NOTE: 最新試合成績
-    const recentStatsHeader = await fetchHTMLText(selectors.recentStatsHeader);
-    const recentStatsData = await fetchHTMLText(selectors.recentStatsData);
-    returnScrapeArray.recentStats = mergeArraysToDictionary(recentStatsHeader, recentStatsData);
-    returnScrapeArray.recentStats.fullText = mergeArraysToString(recentStatsHeader, recentStatsData);
+    const recentStatsHeader = await utilities.fetchHTMLText(selectors.recentStatsHeader);
+    const recentStatsData = await utilities.fetchHTMLText(selectors.recentStatsData);
+    returnScrapeArray.recentStats = utilities.mergeArraysToDictionary(recentStatsHeader, recentStatsData);
+    returnScrapeArray.recentStats.fullText = utilities.mergeArraysToString(
+      recentStatsHeader,
+      recentStatsData
+    );
     //NOTE: 通算成績
-    const totalStatsHeader = await fetchHTMLText(selectors.totalStatsHeader);
-    const totalStatsData = await fetchHTMLText(selectors.totalStatsData);
-    returnScrapeArray.totalStats = mergeArraysToDictionary(totalStatsHeader, totalStatsData);
-    returnScrapeArray.totalStats.fullText = mergeArraysToString(totalStatsHeader, totalStatsData);
+    const totalStatsHeader = await utilities.fetchHTMLText(selectors.totalStatsHeader);
+    const totalStatsData = await utilities.fetchHTMLText(selectors.totalStatsData);
+    returnScrapeArray.totalStats = utilities.mergeArraysToDictionary(totalStatsHeader, totalStatsData);
+    returnScrapeArray.totalStats.fullText = utilities.mergeArraysToString(totalStatsHeader, totalStatsData);
     //NOTE: 更新日時（複数ある場合がある。ページ上に表示されるのは[0]だったので[0]を選択）
-    const updateDateArray = await fetchHTMLText(".bb-tableNote__update");
+    const updateDateArray = await utilities.fetchHTMLText(".bb-tableNote__update");
     returnScrapeArray.updateDate = updateDateArray[0];
   } catch (error) {
     throw new Error(

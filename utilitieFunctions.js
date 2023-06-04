@@ -1,8 +1,8 @@
 const formatToReplyRecent = (scrapedData) => {
   // TODO: updateDateと日付を比較し、「最近の試合なら」「今現在試合中の可能性があるなら」などで分岐（変数を設置して、文の中で分岐するのが良さそう）
   let nowOrNot = false;
-  const nowAsiaTokyo = new Date().toLocaleString({ timeZone: "Asia/Tokyo" });
-  let now = new Date(nowAsiaTokyo);
+  let now = new Date();
+  now.setTime(now.getTime() + 1000 * 60 * 60 * 9);
   now = now.getMonth() + 1 + "月" + now.getDate() + "日";
   if (scrapedData.recentStats.日付 === now) {
     nowOrNot = true;

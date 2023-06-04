@@ -1,62 +1,65 @@
 const axios = require("axios");
 const { load: loadByCheerio } = require("cheerio");
 
-const returnHTML = async (url) => {
+const returnCheerioInterface = async (url) => {
   try {
+    // const response = await axios.get(url);
+    // return response.data;
     const response = await axios.get(url);
-    return response.data;
+    const html = await response.data;
+    const cheerioInterface = loadByCheerio(html);
+    return cheerioInterface;
   } catch (error) {
     throw new Error(error);
   }
 };
 
-const scrapeToSqlite = async (url, cssSelectorArray) => {
-  const html = await returnHTML(url);
-  const $ = loadByCheerio(html);
+const $ = returnCheerioInterface(url);
 
-  const fetchHTMLText = async (cssSelector) => {
-    let returnArray = [];
-    const elements = await $(cssSelector);
+const fetchHTMLText = async (cssSelector) => {
+  let returnArray = [];
+  const elements = await $(cssSelector);
 
-    if (elements.length === 0) {
-      throw new Error(`No elements found for selector: ${cssSelector}\nURL: ${url}`);
+  if (elements.length === 0) {
+    throw new Error(`No elements found for selector: ${cssSelector}\nURL: ${url}`);
+  }
+
+  elements.each((i, e) => {
+    returnArray.push($(e).text().trim());
+  });
+
+  return returnArray;
+};
+
+const mergeArraysToString = (titleArray, dataArray) => {
+  let returnArray = [];
+  if (titleArray.length === dataArray.length) {
+    for (let i = 0; i < titleArray.length; i++) {
+      returnArray.push(titleArray[i] + "：" + dataArray[i]);
     }
-
-    elements.each((i, e) => {
-      returnArray.push($(e).text().trim());
-    });
-
     return returnArray;
-  };
+  } else {
+    throw new Error(
+      `dataLength don't match at mergeArraysToString.\ntitleArray: ${titleArray} , dataArray.length: ${dataArray}\nURL: ${url}`
+    );
+  }
+};
 
-  const mergeArraysToString = (titleArray, dataArray) => {
-    let returnArray = [];
-    if (titleArray.length === dataArray.length) {
-      for (let i = 0; i < titleArray.length; i++) {
-        returnArray.push(titleArray[i] + "：" + dataArray[i]);
-      }
-      return returnArray;
-    } else {
-      throw new Error(
-        `dataLength don't match at mergeArraysToString.\ntitleArray: ${titleArray} , dataArray.length: ${dataArray}\nURL: ${url}`
-      );
+const mergeArraysToDictionary = (keyArray, dataArray) => {
+  let returnArray = {};
+  if (keyArray.length === dataArray.length) {
+    for (let i = 0; i < keyArray.length; i++) {
+      returnArray[keyArray[i]] = dataArray[i];
     }
-  };
+    return returnArray;
+  } else {
+    throw new Error(
+      `dataLength don't match at mergeArrayToDictionary.\nkeyArray: ${keyArray} , dataArray.length: ${dataArray}\nURL: ${url}`
+    );
+  }
+};
 
-  const mergeArraysToDictionary = (keyArray, dataArray) => {
-    let returnArray = {};
-    if (keyArray.length === dataArray.length) {
-      for (let i = 0; i < keyArray.length; i++) {
-        returnArray[keyArray[i]] = dataArray[i];
-      }
-      return returnArray;
-    } else {
-      throw new Error(
-        `dataLength don't match at mergeArrayToDictionary.\nkeyArray: ${keyArray} , dataArray.length: ${dataArray}\nURL: ${url}`
-      );
-    }
-  };
-
+const scrapeToSqlite = async (url, cssSelectorArray) => {
   let returnScrapeArray = {};
   try {
     //NOTE: 名前

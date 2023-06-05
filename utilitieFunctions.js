@@ -94,34 +94,8 @@ const replyToLine = {
     replyToLine.send(token, msg);
   },
   noKeyword: (token) => {
-    replyToLine.send(token, "your message don't include keyword");
+    replyToLine.send(token, "your message doesn't include keyword");
   },
 };
-
-// const replyToLine = async (token, messageType) => {
-//   let msg = "";
-
-//   switch (messageType) {
-//     case "recent":
-//       msg = await fetchAllFromDbWithQuery("SELECT date, name, scrapedData FROM scrapedDb ORDER BY date ASC");
-//       msg = msg.map((e) => (e = formatToReply.recentStats(e.scrapedData))).join("\n\n");
-//       break;
-//     case "total":
-//       msg = await fetchAllFromDbWithQuery("SELECT date, name, scrapedData FROM scrapedDb ORDER BY name ASC");
-//       msg = msg.map((e) => (e = formatToReply.totalStats(e.scrapedData))).join("\n\n");
-//       break;
-//     case "noKeyword":
-//       msg = "your message don't include keyword";
-//       break;
-//     default:
-//       console.error(`err: run: replyToLine: messageType don't match`);
-//   }
-//   client
-//     .replyMessage(token, { type: "text", text: msg })
-//     .then("complete: replyToLine")
-//     .catch((err) => {
-//       console.error(`err: run: replyToken`, err);
-//     });
-// };
 
 exports.replyToLine = replyToLine;

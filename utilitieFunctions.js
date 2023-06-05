@@ -1,4 +1,12 @@
 const sqlite3 = require("sqlite3").verbose();
+const line = require("@line/bot-sdk");
+
+const CONFIG = {
+  channelAccessToken: process.env.ACCESS_TOKEN,
+  channelSecret: process.env.SECRET_KEY,
+};
+
+const client = new line.Client(CONFIG);
 
 const formatToReplyRecent = (scrapedData) => {
   // TODO: updateDateと日付を比較し、「最近の試合なら」「今現在試合中の可能性があるなら」などで分岐（変数を設置して、文の中で分岐するのが良さそう）

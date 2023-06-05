@@ -25,13 +25,10 @@ const receiveAndPassData = (event) => {
   const msg = event.message.text;
   const token = event.replyToken;
   if (msg.includes("set")) {
-    console.log("run: scrapeCycle");
     updateDbWithScrapeData(token);
   } else if (msg.includes("recent")) {
-    console.log(`run: replyToLine("recent")`);
     replyToLine(token, "recent");
   } else if (msg.includes("total")) {
-    console.log(`run: replyToLine("total")`);
     replyToLine(token, "total");
   } else {
     client

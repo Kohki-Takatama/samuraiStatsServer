@@ -107,4 +107,4 @@ const updateDbWithScrape = async (token, scrapeParameters) => {
 };
 
 exports.replyToLine = replyToLine;
-exports.updateDbWithScrapeData = updateDbWithScrape;
+exports.updateDbWithScrape = updateDbWithScrape;

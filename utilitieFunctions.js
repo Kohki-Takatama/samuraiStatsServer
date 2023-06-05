@@ -1,12 +1,11 @@
 const sqlite3 = require("sqlite3").verbose();
 const line = require("@line/bot-sdk");
-
 const LINECONFIG = {
   channelAccessToken: process.env.ACCESS_TOKEN,
   channelSecret: process.env.SECRET_KEY,
 };
-
 const client = new line.Client(LINECONFIG);
+const scrapeAndSaveToDb = require("./scrape.js");
 
 const formatToReply = {
   recentStats: (scrapedData) => {
@@ -98,4 +97,14 @@ const replyToLine = {
   },
 };
 
+const updateDbWithScrape = async (token, scrapeParameters) => {
+  for (let i in scrapeParameters) {
+    console.log(`run: updateDbWithScrapeData, doing: scrape: ${scrapeParameters[i].name}`);
+    await scrapeAndSaveToDb(scrapeParameters[i].url, scrapeParameters[i].selector);
+  }
+  console.log(`complete: updateDbWithScrapeData`);
+  client.replyMessage(token, { type: "text", text: "complete: set" });
+};
+
 exports.replyToLine = replyToLine;
+exports.updateDbWithScrapeData = updateDbWithScrape;

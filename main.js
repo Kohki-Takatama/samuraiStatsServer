@@ -31,12 +31,7 @@ const receiveAndPassData = (event) => {
   } else if (msg.includes("total")) {
     replyToLine(token, "total");
   } else {
-    client
-      .replyMessage(token, { type: "text", text: "your message don't include keyword" })
-      .then("complete: replyToLine")
-      .catch((err) => {
-        console.error(`err: run: replyToken`, err);
-      });
+    replyToLine(token, "noKeyword");
   }
 };
 

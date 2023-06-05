@@ -1,3 +1,5 @@
+const sqlite3 = require("sqlite3").verbose();
+
 const formatToReplyRecent = (scrapedData) => {
   // TODO: updateDateと日付を比較し、「最近の試合なら」「今現在試合中の可能性があるなら」などで分岐（変数を設置して、文の中で分岐するのが良さそう）
   let nowOrNot = false;
@@ -38,5 +40,74 @@ const formatToReplyTotal = (scrapedData) => {
   return returnText;
 };
 
+const fetchAllFromDbWithQuery = (query) => {
+  db.serialize(() => {
+    db.all(query, (err, rows) => {
+      rows.map((e) => {
+        if (e.scrapedData) {
+          e.scrapedData = JSON.parse(e.scrapedData);
+        }
+      });
+      return rows;
+    });
+  });
+  db.close();
+};
+
+const replyToLine = async (token, messageType) => {
+  const db = new sqlite3.Database("./scrapedDb.db");
+  let msg = "";
+
+  switch (messageType) {
+    case "recent":
+      msg = await fetchAllFromDbWithQuery("SELECT date, name, scrapedData FROM scrapedDb ORDER BY date ASC");
+      msg.map((e) => (e = formatToReplyRecent(e.scrapedData))).join("\n\n");
+      break;
+    case "total":
+      msg = await fetchAllFromDbWithQuery("SELECT date, name, scrapedData FROM scrapedDb ORDER BY name ASC");
+      msg.map((e) => (e = formatToReplyRecent(e.scrapedData))).join("\n\n");
+      break;
+    case "error":
+      msg = "your message don't include keyword";
+      break;
+    default:
+      console.error(`err: run: replyToLine: messageType don't match`);
+  }
+  client
+    .replyMessage(token, { type: "text", text: msg })
+    .then("complete: replyToLine")
+    .catch((err) => {
+      console.error(`err: run: replyToken`, err);
+    });
+  // db.serialize(() => {
+  //   db.all("SELECT date, name, scrapedData FROM scrapedDb ORDER BY date ASC", (err, rows) => {
+  //     rows.map((e) => (e.scrapedData = JSON.parse(e.scrapedData)));
+  //     let msg = [];
+  //     for (let i in rows) {
+  //       if (messageType === "recent") {
+  //         msg.push(formatToReplyRecent(rows[i].scrapedData));
+  //       } else if (messageType === "total") {
+  //         msg.push(formatToReplyTotal(rows[i].scrapedData));
+  //       } else if (messageType === "error") {
+  //         msg = "your message don't include keyword";
+  //         break;
+  //       } else {
+  //         console.error(`err: run: replyToLine: messageType don't match`);
+  //       }
+  //     }
+  //     msg = msg.join("\n\n");
+  //     // console.log(`run: replyToLine, check db:`, row.date, row.name);
+  //     client
+  //       .replyMessage(token, { type: "text", text: msg })
+  //       .then("complete: replyToLine")
+  //       .catch((err) => {
+  //         console.error(`err: run: replyToken`, err);
+  //       });
+  //   });
+  // });
+  // db.close();
+};
+
 exports.formatToReplyRecent = formatToReplyRecent;
 exports.formatToReplyTotal = formatToReplyTotal;
+exports.replyToLine = replyToLine;

@@ -55,7 +55,7 @@ const mergeArraysToDictionary = (keyArray, dataArray) => {
   }
 };
 
-const scrapeToSqlite = async (url, selectors) => {
+const scrapeAndSaveToDb = async (url, selectors) => {
   const html = await returnHTML(url);
   let returnScrapeArray = {};
   try {
@@ -113,4 +113,4 @@ const scrapeToSqlite = async (url, selectors) => {
   db.close();
 };
 
-module.exports = scrapeToSqlite;
+module.exports = scrapeAndSaveToDb;

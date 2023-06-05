@@ -27,11 +27,11 @@ const receiveAndPassData = (event) => {
   if (msg.includes("set")) {
     updateDbWithScrapeData(token);
   } else if (msg.includes("recent")) {
-    replyToLine(token, "recent");
+    replyToLine.recentStats(token);
   } else if (msg.includes("total")) {
-    replyToLine(token, "total");
+    replyToLine.totalStats(token);
   } else {
-    replyToLine(token, "noKeyword");
+    replyToLine.noKeyword(token);
   }
 };
 

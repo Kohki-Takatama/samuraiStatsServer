@@ -19,15 +19,6 @@ const receiveAndPassData = (event) => {
     default:
       replyToLine.noKeyword(token);
   }
-  // if (msg.includes("set")) {
-  //   updateDbWithScrape(token, samuraiList);
-  // } else if (msg.includes("recent")) {
-  //   replyToLine.recentStats(token);
-  // } else if (msg.includes("total")) {
-  //   replyToLine.totalStats(token);
-  // } else {
-  //   replyToLine.noKeyword(token);
-  // }
 };
 
 module.exports = receiveAndPassData;

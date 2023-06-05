@@ -93,7 +93,7 @@ const replyToLine = {
     replyToLine.send(token, msg);
   },
   noKeyword: (token) => {
-    replyToLine.send(token, "your message doesn't include keyword");
+    replyToLine.send(token, "please send only keyword");
   },
 };
 

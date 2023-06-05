@@ -41,6 +41,7 @@ const formatToReplyTotal = (scrapedData) => {
 };
 
 const fetchAllFromDbWithQuery = (query) => {
+  const db = new sqlite3.Database("./scrapedDb.db");
   db.serialize(() => {
     db.all(query, (err, rows) => {
       rows.map((e) => {
@@ -55,7 +56,6 @@ const fetchAllFromDbWithQuery = (query) => {
 };
 
 const replyToLine = async (token, messageType) => {
-  const db = new sqlite3.Database("./scrapedDb.db");
   let msg = "";
 
   switch (messageType) {

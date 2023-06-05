@@ -14,10 +14,10 @@ const client = new line.Client(CONFIG);
 
 const updateDbWithScrapeData = async (token) => {
   for (let i in samuraiList) {
-    console.log(`run: scrapeCycle, doing: scrape: ${samuraiList[i].name}`);
+    console.log(`run: updateDbWithScrapeData, doing: scrape: ${samuraiList[i].name}`);
     await scrapeAndSaveToDb(samuraiList[i].url, samuraiList[i].selector);
   }
-  console.log(`complete: scrapeCycle`);
+  console.log(`complete: updateDbWithScrapeData`);
   client.replyMessage(token, { type: "text", text: "complete: set" });
 };
 

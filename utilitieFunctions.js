@@ -41,18 +41,24 @@ const formatToReplyTotal = (scrapedData) => {
 };
 
 const fetchAllFromDbWithQuery = (query) => {
-  const db = new sqlite3.Database("./scrapedDb.db");
-  db.serialize(() => {
-    db.all(query, (err, rows) => {
-      rows.map((e) => {
-        if (e.scrapedData) {
-          e.scrapedData = JSON.parse(e.scrapedData);
+  return new Promise((resolve, reject) => {
+    const db = new sqlite3.Database("./scrapedDb.db");
+    db.serialize(() => {
+      db.all(query, (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          rows.forEach((e) => {
+            if (e.scrapedData) {
+              e.scrapedData = JSON.parse(e.scrapedData);
+            }
+          });
+          resolve(rows);
         }
       });
-      return rows;
     });
+    db.close();
   });
-  db.close();
 };
 
 const replyToLine = async (token, messageType) => {

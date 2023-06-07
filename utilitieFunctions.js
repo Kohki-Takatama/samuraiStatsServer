@@ -99,8 +99,7 @@ const replyToLine = {
 
 const updateDbWithScrape = async (scrapeParameters) => {
   for (let i in scrapeParameters) {
-    console.log(`run: updateDbWithScrapeData, doing: scrape: ${scrapeParameters[i].name}`);
-    await scrapeAndSaveToDb(scrapeParameters[i].url, scrapeParameters[i].selector);
+    await scrapeAndSaveToDb(scrapeParameters[i]);
   }
   console.log(`complete: updateDbWithScrapeData`);
 };

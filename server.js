@@ -28,12 +28,11 @@ fastify.post("/webhook", async (request, reply) => {
   parsedBody.events.map((event) => {
     assignLineTask(event);
   });
-
   reply.code(200).send("OK"); // 200 OKを返します
 });
 
 // 新しいエンドポイントを作成してUptimeRobotからのリクエストを受け付けます
-fastify.get("/uptimerobot", async (request, reply) => {
+fastify.head("/uptimerobot", async (request, reply) => {
   assignLineTask();
   reply.code(200).send("OK");
 });

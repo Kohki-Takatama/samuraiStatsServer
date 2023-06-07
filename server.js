@@ -34,7 +34,7 @@ fastify.post("/webhook", async (request, reply) => {
 });
 
 // 新しいエンドポイントを作成してUptimeRobotからのリクエストを受け付けます
-fastify.head("/uptimerobot", async (request, reply) => {
+fastify.get("/uptimerobot", async (request, reply) => {
   console.log("request: uptimeRobot");
   updateDbWithScrape();
   reply.code(200).send("OK");

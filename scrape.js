@@ -55,11 +55,12 @@ const mergeArraysToDictionary = (keyArray, dataArray) => {
 };
 
 const scrapeAndSaveToDb = async (parameter) => {
-  const html = await returnHTML(url);
   const url = parameter.url;
   const selectors = parameter.selector;
   const name = parameter.name;
   console.log(`run: updateDbWithScrapeData, doing: scrape: ${name}`);
+
+  const html = await returnHTML(url);
   let returnScrapeArray = {};
   try {
     //NOTE: 名前

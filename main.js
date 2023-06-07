@@ -3,12 +3,13 @@ const utilities = require("./utilitieFunctions.js");
 const replyToLine = utilities.replyToLine;
 const updateDbWithScrape = utilities.updateDbWithScrape;
 
-const receiveAndPassData = (event) => {
+const assignLineTask = async (event) => {
   const msg = event.message.text;
   const token = event.replyToken;
   switch (msg) {
     case "set":
-      updateDbWithScrape(token, samuraiList);
+      await updateDbWithScrape(samuraiList);
+      replyToLine.send(token, "complete: set");
       break;
     case "recent":
       replyToLine.recentStats(token);
@@ -21,4 +22,4 @@ const receiveAndPassData = (event) => {
   }
 };
 
-module.exports = receiveAndPassData;
+module.exports = assignLineTask;

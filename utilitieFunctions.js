@@ -97,13 +97,12 @@ const replyToLine = {
   },
 };
 
-const updateDbWithScrape = async (token, scrapeParameters) => {
+const updateDbWithScrape = async (scrapeParameters) => {
   for (let i in scrapeParameters) {
     console.log(`run: updateDbWithScrapeData, doing: scrape: ${scrapeParameters[i].name}`);
     await scrapeAndSaveToDb(scrapeParameters[i].url, scrapeParameters[i].selector);
   }
   console.log(`complete: updateDbWithScrapeData`);
-  client.replyMessage(token, { type: "text", text: "complete: set" });
 };
 
 exports.replyToLine = replyToLine;

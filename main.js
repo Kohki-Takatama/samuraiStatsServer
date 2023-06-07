@@ -22,4 +22,9 @@ const assignLineTask = async (event) => {
   }
 };
 
-module.exports = assignLineTask;
+const assignUptimeRobotTask = async () => {
+  await updateDbWithScrape(samuraiList);
+};
+
+exports.assignLineTask = assignLineTask;
+exports.assignUptimeRobotTask = assignUptimeRobotTask;

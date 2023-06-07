@@ -2,7 +2,8 @@ const fastify = require("fastify")({ logger: false });
 const line = require("@line/bot-sdk");
 
 const assignLineTask = require("./main.js");
-const { updateDbWithScrape } = require("./utilitieFunctions.js");
+const utilities = require("./utilitieFunctions.js");
+const updateDbWithScrape = utilities.updateDbWithScrape;
 
 const LINECONFIG = {
   channelAccessToken: process.env.ACCESS_TOKEN,
@@ -34,9 +35,7 @@ fastify.post("/webhook", async (request, reply) => {
 
 // 新しいエンドポイントを作成してUptimeRobotからのリクエストを受け付けます
 fastify.head("/uptimerobot", async (request, reply) => {
-  //updateDbWithScrape();
-  const rawBody = request.body;
-  console.log(rawBody);
+  updateDbWithScrape();
   reply.code(200).send("OK");
 });
 

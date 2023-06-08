@@ -6,6 +6,7 @@ const updateDbWithScrape = utilities.updateDbWithScrape;
 const assignLineTask = async (event) => {
   const msg = event.message.text;
   const token = event.replyToken;
+  //TODO: なるべくswitch文のまま、正規表現に書き換え
   switch (msg) {
     case "set":
       await updateDbWithScrape(samuraiList);

@@ -26,7 +26,7 @@ const formatToReply = {
         nowOrNot ? "しています" : "しました"
       }。\n成績は「${scrapedData.recentStats.打席結果}」で${nowOrNot ? "す" : "した"}。\n詳細な成績→ 打点:${
         scrapedData.recentStats.打点
-      } 盗塁：${scrapedData.recentStats.盗塁}`;
+      }`;
     } else {
       returnText = `${scrapedData.playerName}は${scrapedData.recentStats.日付}の試合に登板${
         nowOrNot ? "しています" : "しました"

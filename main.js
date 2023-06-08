@@ -4,9 +4,12 @@ const replyToLine = utilities.replyToLine;
 const updateDbWithScrape = utilities.updateDbWithScrape;
 
 const assignLineTask = async (event) => {
-  const msg = event.message.text;
+  let msg = event.message.text;
   const token = event.replyToken;
   //TODO: なるべくswitch文のまま、正規表現に書き換え
+  msg.map((e) => {
+    e.match(/[A-Z]/) ? e.toLowerCase() : e;
+  });
   switch (msg) {
     case "set":
       await updateDbWithScrape(samuraiList);

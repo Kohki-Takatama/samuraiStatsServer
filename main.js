@@ -7,7 +7,7 @@ const assignLineTask = async (event) => {
   let msg = event.message.text;
   const token = event.replyToken;
   //TODO: なるべくswitch文のまま、正規表現に書き換え
-  msg
+  msg = msg
     .split("")
     .map((e) => {
       e.match(/[A-Z]/) ? e.toLowerCase() : e;

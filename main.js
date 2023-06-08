@@ -11,7 +11,7 @@ const assignLineTask = async (event) => {
   msg = msg
     .split("")
     .map((e) => {
-      e.match(/[A-Z]/) ? e.toLowerCase() : e;
+      return e.match(/[A-Z]/) ? e.toLowerCase() : e;
     })
     .join("");
   console.log("after msg: ", msg);

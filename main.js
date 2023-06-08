@@ -7,12 +7,14 @@ const assignLineTask = async (event) => {
   let msg = event.message.text;
   const token = event.replyToken;
   //TODO: なるべくswitch文のまま、正規表現に書き換え
+  console.log("before msg: ", msg);
   msg = msg
     .split("")
     .map((e) => {
       e.match(/[A-Z]/) ? e.toLowerCase() : e;
     })
     .join("");
+  console.log("after msg: ", msg);
   switch (msg) {
     case "set":
       await updateDbWithScrape(samuraiList);

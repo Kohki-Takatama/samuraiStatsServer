@@ -4,25 +4,18 @@ const replyToLine = utilities.replyToLine;
 const updateDbWithScrape = utilities.updateDbWithScrape;
 
 const assignLineTask = async (event) => {
-  let msg = event.message.text;
+  const msg = event.message.text;
   const token = event.replyToken;
-  //TODO: なるべくswitch文のまま、正規表現に書き換え
   console.log("check: sended message: ", msg);
-  msg = msg
-    .split("")
-    .map((e) => {
-      return e.match(/[A-Z]/) ? e.toLowerCase() : e;
-    })
-    .join("");
-  switch (msg) {
-    case "set":
+  switch (true) {
+    case /[\n.]*[Ss][Ee][Tt][\n.]*/.test(msg):
       await updateDbWithScrape(samuraiList);
       replyToLine.send(token, "complete: set");
       break;
-    case "recent":
+    case /[\n.]*[Rr][Ee][Ce][Ee][Nn][Tt][\n.]*/.test(msg):
       replyToLine.recentStats(token);
       break;
-    case "total":
+    case /[\n.]*[Tt][Oo][Tt][Aa][Ll][\n.]*/.test(msg):
       replyToLine.totalStats(token);
       break;
     default:

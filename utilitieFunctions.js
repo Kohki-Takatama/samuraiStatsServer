@@ -33,7 +33,7 @@ const formatToReply = {
       }。\n${scrapedData.recentStats.投球回}回を投げ、失点は${scrapedData.recentStats.失点}、自責点は${
         scrapedData.recentStats.自責点
       } で${nowOrNot ? "す" : "した"}。\n勝敗は${
-        scrapedData.recentStats.結果 === "勝" || "負" ? scrapedData.recentStats.結果 : "つきません"
+        scrapedData.recentStats.結果 === "-" ? "つきません" : scrapedData.recentStats.結果
       }でした。\n詳細な成績→ 被安打:${scrapedData.recentStats.被安打} 被本塁打:${
         scrapedData.recentStats.被本塁打
       } 奪三振:${scrapedData.recentStats.奪三振} 与四死球:${

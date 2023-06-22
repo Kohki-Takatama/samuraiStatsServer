@@ -12,7 +12,7 @@ const assignLineTask = async (event) => {
       await updateDbWithScrape(samuraiList);
       replyToLine.send(token, "complete: set");
       break;
-    case /[\n.]*[Rr][Ee][Ce][Ee][Nn][Tt][\n.]*/.test(msg):
+    case /[\n.]*[Rr][Ee][Cc][Ee][Nn][Tt][\n.]*/.test(msg):
       replyToLine.recentStats(token);
       break;
     case /[\n.]*[Tt][Oo][Tt][Aa][Ll][\n.]*/.test(msg):

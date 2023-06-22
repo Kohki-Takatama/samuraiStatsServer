@@ -24,7 +24,11 @@ const formatToReply = {
     if ("打席結果" in scrapedData.recentStats) {
       returnText = `${scrapedData.playerName}\n最新:${scrapedData.recentStats.日付}\n成績は「${
         scrapedData.recentStats.打席結果
-      }」で${nowOrNot ? "す" : "した"}。\n詳細な成績→ 打点:${scrapedData.recentStats.打点}`;
+      }」で${nowOrNot ? "す" : "した"}。\n詳細な成績→ 打点:${
+        scrapedData.recentStats.打点
+      }\nシーズン成績→ 打率:${scrapedData.totalStats.打率} 出塁率:${scrapedData.totalStats.出塁率} OPS:${
+        scrapedData.totalStats.OPS
+      } 本塁打:${scrapedData.totalStats.本塁打}`;
     } else {
       returnText = `${scrapedData.playerName}\n最新:${scrapedData.recentStats.日付}\n${
         scrapedData.recentStats.投球回
@@ -36,7 +40,11 @@ const formatToReply = {
         scrapedData.recentStats.被本塁打
       } 奪三振:${scrapedData.recentStats.奪三振} 与四死球:${
         Number(scrapedData.recentStats.与四球) + Number(scrapedData.recentStats.与死球)
-      } 暴投・ボーク:${Number(scrapedData.recentStats.暴投) + Number(scrapedData.recentStats.ボーク)}`;
+      } 暴投・ボーク:${
+        Number(scrapedData.recentStats.暴投) + Number(scrapedData.recentStats.ボーク)
+      }\nシーズン成績→ ${scrapedData.totalStats.勝利}勝${scrapedData.totalStats.敗戦}敗 防御率:${
+        scrapedData.totalStats.防御率
+      }`;
     }
     return returnText;
   },

@@ -32,7 +32,7 @@ const formatToReply = {
     } else {
       returnText = `${scrapedData.playerName}\n最新:${scrapedData.recentStats.日付}\n${
         scrapedData.recentStats.投球回
-      }回を投げ、失点は${scrapedData.recentStats.失点}、自責点は${scrapedData.recentStats.自責点} で、${
+      }回を投げ、失点${scrapedData.recentStats.失点}、自責点${scrapedData.recentStats.自責点}\n${
         scrapedData.recentStats.結果 === "-"
           ? "勝/敗はついていません。"
           : scrapedData.recentStats.結果 + "投手となっています。"

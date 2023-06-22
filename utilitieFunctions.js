@@ -22,17 +22,13 @@ const formatToReply = {
 
     //NOTE: 打者か投手かの判別。
     if ("打席結果" in scrapedData.recentStats) {
-      returnText = `${scrapedData.playerName}は${scrapedData.recentStats.日付}の試合に出場${
-        nowOrNot ? "しています" : "しました"
-      }。\n成績は「${scrapedData.recentStats.打席結果}」で${nowOrNot ? "す" : "した"}。\n詳細な成績→ 打点:${
-        scrapedData.recentStats.打点
-      }`;
+      returnText = `${scrapedData.playerName}\n最新:${scrapedData.recentStats.日付}\n成績は「${
+        scrapedData.recentStats.打席結果
+      }」で${nowOrNot ? "す" : "した"}。\n詳細な成績→ 打点:${scrapedData.recentStats.打点}`;
     } else {
-      returnText = `${scrapedData.playerName}は${scrapedData.recentStats.日付}の試合に登板${
-        nowOrNot ? "しています" : "しました"
-      }。\n${scrapedData.recentStats.投球回}回を投げ、失点は${scrapedData.recentStats.失点}、自責点は${
-        scrapedData.recentStats.自責点
-      } で、${
+      returnText = `${scrapedData.playerName}\n最新:${scrapedData.recentStats.日付}\n${
+        scrapedData.recentStats.投球回
+      }回を投げ、失点は${scrapedData.recentStats.失点}、自責点は${scrapedData.recentStats.自責点} で、${
         scrapedData.recentStats.結果 === "-"
           ? "勝/敗はついていません。"
           : scrapedData.recentStats.結果 + "投手となっています。"

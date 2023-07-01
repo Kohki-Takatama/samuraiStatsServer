@@ -104,7 +104,10 @@ const replyToLine = {
     replyToLine.send(token, ``);
   },
   noKeyword: (token) => {
-    replyToLine.send(token, "please send only keyword");
+    replyToLine.send(
+      token,
+      "一致するキーワードがありません。以下のキーワードを送ってください。\n＜最新成績＞\n最新 / recent\n＜シーズン成績＞\n通算 / シーズン / total / season"
+    );
   },
 };
 

@@ -26,6 +26,7 @@ const assignLineTask = async (event) => {
         token,
         `以下のキーワードを送ってください。\n＜最新成績＞\n最新 / recent\n＜シーズン成績＞\n通算 / シーズン / total / season`
       );
+      break;
     default:
       replyToLine.noKeyword(token);
   }

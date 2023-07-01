@@ -81,9 +81,9 @@ const replyToLine = {
   send: (token, msg) => {
     client
       .replyMessage(token, { type: "text", text: msg })
-      .then("complete: replyToLine")
+      .then(console.log("complete: replyToLine"))
       .catch((err) => {
-        console.error(`err: run: replyToken`, err);
+        console.error(`err: run: replyToLine.send`, err);
       });
   },
   recentStats: async (token) => {

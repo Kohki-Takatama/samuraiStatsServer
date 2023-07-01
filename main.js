@@ -7,12 +7,13 @@ const assignLineTask = async (event) => {
   const msg = event.message.text;
   const token = event.replyToken;
   console.log("check: sended message: ", msg);
+  const keywordRecent = /[\n.]*[Rr][Ee][Cc][Ee][Nn][Tt][\n.]*/ || "最新";
   switch (true) {
     case msg === process.env.KEYWORD_SET:
       await updateDbWithScrape(samuraiList);
       replyToLine.send(token, "complete: set");
       break;
-    case /[\n.]*[Rr][Ee][Cc][Ee][Nn][Tt][\n.]*/.test(msg):
+    case keywordRecent.test(msg):
       replyToLine.recentStats(token);
       break;
     case /[\n.]*[Tt][Oo][Tt][Aa][Ll][\n.]*/.test(msg):

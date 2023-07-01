@@ -24,7 +24,7 @@ const assignLineTask = async (event) => {
     case /[\n.]*[Hh][Oo][Ww][Tt][Oo]*/.test(msg) || msg.includes("使い方"):
       replyToLine.send(
         token,
-        `以下のキーワードを送ってください。\n＜最新成績＞\n最新 / recent\n＜シーズン成績＞\n通算 / シーズン / total / season`
+        `以下のキーワードを送ってください。\n＜最新成績＞\n最新 / recent\n＜シーズン成績＞\n通算 / シーズン / total / season\n\n※通算成績は更新に時間がかかるため、試合前の情報が表示されることがあります。`
       );
       break;
     default:

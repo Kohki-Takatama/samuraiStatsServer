@@ -8,7 +8,7 @@ const assignLineTask = async (event) => {
   const token = event.replyToken;
   console.log("check: sended message: ", msg);
   switch (true) {
-    case /[\n.]*[Ss][Ee][Tt][\n.]*/.test(msg):
+    case msg === process.env.KEYWORD_SET:
       await updateDbWithScrape(samuraiList);
       replyToLine.send(token, "complete: set");
       break;

@@ -12,12 +12,20 @@ const assignLineTask = async (event) => {
       await updateDbWithScrape(samuraiList);
       replyToLine.send(token, "complete: set");
       break;
-    case /[\n.]*[Rr][Ee][Cc][Ee][Nn][Tt][\n.]*/.test(msg) || "最新".test(msg):
+    case /[\n.]*[Rr][Ee][Cc][Ee][Nn][Tt][\n.]*/.test(msg) || msg.includes("最新"):
       replyToLine.recentStats(token);
       break;
-    case /[\n.]*[Tt][Oo][Tt][Aa][Ll][\n.]*/.test(msg):
+    case /[\n.]*[Tt][Oo][Tt][Aa][Ll][\n.]*/.test(msg) ||
+      /[\n.]*[Ss][Ee][Aa][Ss][Oo][Nn][\n.]*/.test(msg) ||
+      msg.includes("通算") ||
+      msg.includes("シーズン"):
       replyToLine.totalStats(token);
       break;
+    case /[\n.]*[Hh][Oo][Ww][Tt][Oo]*/.test(msg) || msg.includes("使い方"):
+      replyToLine.send(
+        token,
+        `以下のキーワードを送ってください。\n＜最新成績＞\n最新 / recent\n＜シーズン成績＞\n通算 / シーズン / total / season`
+      );
     default:
       replyToLine.noKeyword(token);
   }

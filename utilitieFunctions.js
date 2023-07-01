@@ -100,6 +100,9 @@ const replyToLine = {
     msg = msg.map((e) => (e = formatToReply.totalStats(e.scrapedData))).join("\n\n");
     replyToLine.send(token, msg);
   },
+  howTo: (token) => {
+    replyToLine.send(token, ``);
+  },
   noKeyword: (token) => {
     replyToLine.send(token, "please send only keyword");
   },

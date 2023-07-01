@@ -22,9 +22,10 @@ const assignLineTask = async (event) => {
       replyToLine.totalStats(token);
       break;
     case /[\n.]*[Hh][Oo][Ww][Tt][Oo]*/.test(msg) || msg.includes("使い方"):
+      //TODO: 「以下のキーワードを・・・」が散乱してるので、main.jsかreplyToLineでまとめる。新しくHowToをつくるか、noKeywordと合わせてsendにまとめるか考える。
       replyToLine.send(
         token,
-        `以下のキーワードを送ってください。\n＜最新成績＞\n最新 / recent\n＜シーズン成績＞\n通算 / シーズン / total / season\n\n※通算成績は更新に時間がかかるため、試合前の情報が表示されることがあります。`
+        `以下のキーワードを送ってください。\n＜最新成績＞\n最新 / recent\n＜シーズン成績＞\n通算 / シーズン / total / season\n\n※シーズン成績は更新に時間がかかるため、試合前の情報が表示されることがあります。`
       );
       break;
     default:

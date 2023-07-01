@@ -91,7 +91,7 @@ const replyToLine = {
       "SELECT date, name, scrapedData FROM scrapedDb ORDER BY date ASC"
     );
     msg = msg.map((e) => (e = formatToReply.recentStats(e.scrapedData))).join("\n\n");
-    msg = msg + "\n\n※通算成績は更新に時間がかかるため、試合前の情報が表示されることがあります。";
+    msg = msg + "\n\n※シーズン成績は更新に時間がかかるため、試合前の情報が表示されることがあります。";
     replyToLine.send(token, msg);
   },
   totalStats: async (token) => {
@@ -99,7 +99,7 @@ const replyToLine = {
       "SELECT date, name, scrapedData FROM scrapedDb ORDER BY name ASC"
     );
     msg = msg.map((e) => (e = formatToReply.totalStats(e.scrapedData))).join("\n\n");
-    msg = msg + "\n\n※通算成績は更新に時間がかかるため、試合前の情報が表示されることがあります。";
+    msg = msg + "\n\n※シーズン成績は更新に時間がかかるため、試合前の情報が表示されることがあります。";
     replyToLine.send(token, msg);
   },
   howTo: (token) => {
@@ -108,7 +108,7 @@ const replyToLine = {
   noKeyword: (token) => {
     replyToLine.send(
       token,
-      "一致するキーワードがありません。以下のキーワードを送ってください。\n＜最新成績＞\n最新 / recent\n＜シーズン成績＞\n通算 / シーズン / total / season\n\n※通算成績は更新に時間がかかるため、試合前の情報が表示されることがあります。"
+      "一致するキーワードがありません。以下のキーワードを送ってください。\n＜最新成績＞\n最新 / recent\n＜シーズン成績＞\n通算 / シーズン / total / season\n\n※シーズン成績は更新に時間がかかるため、試合前の情報が表示されることがあります。"
     );
   },
 };

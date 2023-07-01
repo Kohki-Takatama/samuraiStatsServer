@@ -2,6 +2,8 @@ const commonCSSSelector = {
   playerName:
     "#contentMain > div.bb-centerColumn > div > div.bb-modCommon01 > div > div > div.bb-profile__data > ruby > h1",
   updateDate: ".bb-tableNote__update",
+  recentTeamStatsUrl:
+    "#game_p > tbody > tr:nth-child(1) > td.bb-playerStatsTable__data.bb-playerStatsTable__data--date > a",
 };
 const nonFielderOtaniCommonCSSSelector = {
   totalStatsHeader: "#js-tabDom01 > section:nth-child(1) > table > tbody > tr > th",

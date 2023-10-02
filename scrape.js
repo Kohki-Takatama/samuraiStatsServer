@@ -16,7 +16,7 @@ const fetchHTMLText = async (html, selector) => {
   const elements = await $(selector);
 
   if (elements.length === 0) {
-    throw new Error(`No elements found for selector: ${selector}\nURL: ${url}`);
+    throw new Error(`No elements found for selector: ${selector}`);
   }
 
   elements.each((i, e) => {
@@ -35,7 +35,7 @@ const mergeArraysToString = (titleArray, dataArray) => {
     return returnArray;
   } else {
     throw new Error(
-      `dataLength don't match at mergeArraysToString.\ntitleArray: ${titleArray} , dataArray.length: ${dataArray}\nURL: ${url}`
+      `dataLength don't match at mergeArraysToString.\ntitleArray: ${titleArray} , dataArray.length: ${dataArray}`
     );
   }
 };
@@ -49,7 +49,7 @@ const mergeArraysToDictionary = (keyArray, dataArray) => {
     return returnArray;
   } else {
     throw new Error(
-      `dataLength don't match at mergeArrayToDictionary.\nkeyArray: ${keyArray} , dataArray.length: ${dataArray}\nURL: ${url}`
+      `dataLength don't match at mergeArrayToDictionary.\nkeyArray: ${keyArray} , dataArray.length: ${dataArray}`
     );
   }
 };

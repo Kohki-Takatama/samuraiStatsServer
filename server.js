@@ -1,4 +1,4 @@
-const fastify = require("fastify")({ logger: false });
+weconst fastify = require("fastify")({ logger: false });
 const line = require("@line/bot-sdk");
 
 const assignTask = require("./main.js");

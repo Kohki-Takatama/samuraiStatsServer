@@ -1,3 +1,5 @@
+//TODO:リファクタリング：Selectorの一元管理（全てのファイルで共通して、できれば一か所で管理）
+
 const commonCSSSelector = {
   playerName:
     "#contentMain > div.bb-centerColumn > div.bb-modCommon01 > div > div > div.bb-profile__data > ruby > h1",

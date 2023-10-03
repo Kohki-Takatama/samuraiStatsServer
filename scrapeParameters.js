@@ -1,4 +1,4 @@
-//TODO:リファクタリング：Selectorの一元管理（全てのファイルで共通して、できれば一か所で管理）
+//TODO:リファクタリング：Selector項目の一元管理（全てのファイルで共通して、できれば一か所で管理）
 
 const commonCSSSelector = {
   playerName:
